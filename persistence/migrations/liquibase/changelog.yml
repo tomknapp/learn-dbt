@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      - file: changelog/changelogs/20250203-1-create-customer.sql
+  - include:
+      - file: changelog/changelogs/20250203-2-create-telephone.sql
+  - include:
+      - file: changelog/changelogs/20250203-3-create-email.sql
+  - include:
+      - file: changelog/changelogs/20250203-4-create-address.sql
+  - include:
+      - file: changelog/changelogs/20250203-5-faked-data.sql
