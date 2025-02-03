@@ -1,0 +1,8 @@
+[tools]
+python = "3.13.1"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[hooks]
+postinstall = 'pip install --upgrade pip; python -m pip install -U -r requirements/test.txt; pre-commit install'

@@ -1,0 +1,9 @@
+--requirement base.txt
+
+pre-commit
+pytest
+pytest-asyncio
+pytest-cov
+pytest-env
+ruff
+taskipy

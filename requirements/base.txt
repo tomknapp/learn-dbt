@@ -1,0 +1,4 @@
+--constraint base.lock
+
+dbt-core
+dbt-postgres

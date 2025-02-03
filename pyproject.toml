@@ -1,0 +1,42 @@
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "B", # flake8-bugbear
+    "C", # flake8-comprehensions
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # isort
+    "W", # pycodestyle warnings
+]
+ignore = [
+    "C901", # too complex
+    "E501", # line too long, handled by black,
+    "E711", # exemption required for sqlalchemy queries
+]
+
+[tool.ruff.lint.per-file-ignores]
+# "./consumers/auth/cognito.py" = ["B008"]
+
+[tool.ruff.lint.isort]
+known-third-party = ["fastapi", "pydantic", "starlette"]
+
+[tool.taskipy.tasks]
+'fmt' = { cmd = "ruff format .", help = "formats all python files" }
+'install:test' = { cmd = "python -m pip install -U -r requirements/test.txt", help = "install test requirements" }
+'lint:fix' = { cmd = "ruff check --fix .", help = "linter fix all python files" }
+'lint' = { cmd = "ruff check .", help = "lints all python files" }
+'test' = { cmd = "pytest tests/", help = "runs all unit tests" }
+'openapi' = { cmd = 'python -c "from consumers import app; print(app.openapi())"', help = "print the openapi spec" }
+
+# [tool.mypy]
+# strict = true
+
+# [tool.pytest.ini_options]
+# env = [
+#     'AWS_DEFAULT_REGION=eu-west-1',
+#     'MATCHING_SERVICE_URL=http://matching-service',
+#     'SELF_EXCLUSION_REGISTER_APPLICATION_URL=http://self-exclusion-register',
+#     'DATABASE_HOST=127.0.0.1',
+# ]
