@@ -1,0 +1,79 @@
+services:
+  ###########################################################################
+  #      _    ____  ____  _     ___ ____    _  _____ ___ ___  _   _ ____
+  #     / \  |  _ \|  _ \| |   |_ _/ ___|  / \|_   _|_ _/ _ \| \ | / ___|
+  #    / _ \ | |_) | |_) | |    | | |     / _ \ | |  | | | | |  \| \___ \
+  #   / ___ \|  __/|  __/| |___ | | |___ / ___ \| |  | | |_| | |\  |___) |
+  #  /_/   \_\_|   |_|   |_____|___\____/_/   \_\_| |___\___/|_| \_|____/
+  ###########################################################################
+
+  #####################################################
+  #   ____  _____ ______     _____ ____ _____ ____
+  #  / ___|| ____|  _ \ \   / /_ _/ ___| ____/ ___|
+  #  \___ \|  _| | |_) \ \ / / | | |   |  _| \___ \
+  #   ___) | |___|  _ < \ V /  | | |___| |___ ___) |
+  #  |____/|_____|_| \_\ \_/  |___\____|_____|____/
+  #####################################################
+  # user-service:
+  #   build:
+  #     context: ./backend/user-service
+  #     target: run
+  #   environment:
+  #     - ENVIRONMENT=local
+  #     - DATABASE_PASSWORD=59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20
+  #   ports:
+  #   - "8000:8000"
+  #   expose:
+  #     - 8000
+  #   depends_on:
+  #     - postgres
+
+  #####################################################################
+  #   ____  _____ ____  ____ ___ ____ _____ _____ _   _  ____ _____
+  #  |  _ \| ____|  _ \/ ___|_ _/ ___|_   _| ____| \ | |/ ___| ____|
+  #  | |_) |  _| | |_) \___ \| |\___ \ | | |  _| |  \| | |   |  _|
+  #  |  __/| |___|  _ < ___) | | ___) || | | |___| |\  | |___| |___
+  #  |_|   |_____|_| \_\____/___|____/ |_| |_____|_| \_|\____|_____|
+  #####################################################################
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: rootnotroot
+      POSTGRES_PASSWORD: 59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20
+      POSTGRES_DB: postgres
+    volumes:
+      - ./persistence/data/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 30s
+      timeout: 30s
+      start_period: 30s
+      retries: 3
+
+  migrations:
+    image: liquibase/liquibase:latest
+    platform: linux/amd64
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./persistence/migrations/liquibase:/liquibase/changelog
+    command:
+      [
+        "update",
+        "--url=jdbc:postgresql://postgres:5432/postgres",
+        "--changelog-file=changelog/changelog.yml",
+      ]
+    environment:
+      LIQUIBASE_COMMAND_PASSWORD: "59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20"
+      LIQUIBASE_COMMAND_USERNAME: "rootnotroot"
+#############################################
+#   _____ ___   ___  _     ___ _   _  ____
+#  |_   _/ _ \ / _ \| |   |_ _| \ | |/ ___|
+#    | || | | | | | | |    | ||  \| | |  _
+#    | || |_| | |_| | |___ | || |\  | |_| |
+#    |_| \___/ \___/|_____|___|_| \_|\____|
+#############################################
