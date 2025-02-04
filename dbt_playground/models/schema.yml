@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: customers
+    description: Flattened view of customers
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: customer_geography
+    description: Flattened view of the customers most recent location
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
