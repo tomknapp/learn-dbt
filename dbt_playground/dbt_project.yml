@@ -7,6 +7,10 @@ version: "1.0.0"
 # This setting configures which "profile" dbt uses for this project.
 profile: "dbt_playground"
 
+# can be passed in/overriden on the command line
+vars:
+  best_country: Scotland
+
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
 # found in the "models/" directory. You probably won't need to change these!
@@ -21,6 +25,10 @@ clean-targets: # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+# Hooks
+on-run-start: "{{ insert_audit('dbt_run_start')}}" # using the macro
+on-run-end: "insert into public.audit (audit_type) values ('dbt_run_end'); commit;"
+
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
@@ -28,7 +36,10 @@ clean-targets: # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
+  pre-hook: "{{ insert_audit('dbt_model_start')}}"
+  post-hook: "{{ insert_audit('dbt_model_end')}}"
   dbt_playground:
     # Config indicated by + and applies to all files under models/example/
     playground:
       +materialized: view
+      +schema: staging

@@ -11,6 +11,8 @@ sources:
         description: "Customers within the system"
       - name: address
         description: "Addresses relating to customers"
+      - name: audit
+        description: "Audit log of database activity"
 
 models:
   - name: customers
