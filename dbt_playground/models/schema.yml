@@ -24,7 +24,7 @@ models:
           - not_null
 
   - name: customer_geography
-    description: Flattened view of the customers most recent location
+    description: '{{ doc("customer_geography") }}'
     columns:
       - name: customer_id
         tests:
