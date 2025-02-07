@@ -13,6 +13,8 @@ from airflow.utils.log.logging_mixin import LoggingMixin
 
 logger = LoggingMixin().log
 
+connection_id = "postgres_dag_connection"
+
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
@@ -58,7 +60,7 @@ def ons_postcode_pipeline():
     @task
     def create_postgres_table():
         """Create the Postgres table if it doesn't exist"""
-        pg_hook = PostgresHook(postgres_conn_id="postgres_default")
+        pg_hook = PostgresHook(postgres_conn_id=connection_id)
 
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS postcodes (
@@ -85,7 +87,7 @@ def ons_postcode_pipeline():
         temp_dir = download_info["temp_dir"]
         logger.info(f"Starting to load data to Postgres from: {temp_dir}")
 
-        pg_hook = PostgresHook(postgres_conn_id="postgres_default")
+        pg_hook = PostgresHook(postgres_conn_id=connection_id)
 
         processed_count = 0
         data_dir = os.path.join(temp_dir, "Data", "CSV")
