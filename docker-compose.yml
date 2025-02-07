@@ -6,8 +6,8 @@ x-airflow-common: &airflow-common
   # build: .
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://rootnotroot:59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20@postgres/postgres
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://rootnotroot:59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20@postgres/postgres
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ""
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
@@ -181,6 +181,8 @@ services:
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}/airflow:/sources
+    depends_on:
+      <<: *airflow-common-depends-on
 
   airflow-cli:
     <<: *airflow-common
@@ -249,9 +251,9 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: rootnotroot
-      POSTGRES_PASSWORD: 59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - ./persistence/data/postgres:/var/lib/postgresql/data
     ports:
@@ -274,12 +276,12 @@ services:
     command:
       [
         "update",
-        "--url=jdbc:postgresql://postgres:5432/postgres",
+        "--url=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}",
         "--changelog-file=changelog/changelog.yml",
       ]
     environment:
-      LIQUIBASE_COMMAND_PASSWORD: "59674463d5b1219747e82a1c891f81a3eb262db97b9bfbd62f7df60c4efc0c20"
-      LIQUIBASE_COMMAND_USERNAME: "rootnotroot"
+      LIQUIBASE_COMMAND_PASSWORD: ${DB_PASSWORD}
+      LIQUIBASE_COMMAND_USERNAME: ${DB_USER}
 #############################################
 #   _____ ___   ___  _     ___ _   _  ____
 #  |_   _/ _ \ / _ \| |   |_ _| \ | |/ ___|
