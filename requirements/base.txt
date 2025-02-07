@@ -3,3 +3,5 @@
 dbt-core
 dbt-postgres
 apache-airflow
+apache-airflow-providers-postgres
+polars
