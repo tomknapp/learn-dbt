@@ -29,7 +29,7 @@ in Airflow to provide the source data to be **T**ransformed by **dbt**.
 
 Create a .env file in the project root directory based on the .env_example
 
-Generate a connection paramter compatible secure password:
+Generate a (connection parameter compatible) secure password:
 
 ```zsh
 openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 64
