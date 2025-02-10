@@ -9,8 +9,8 @@ Database setup is performed on startup by applying database migrations to
 create the schema and populate it with faked data.
 
 Liquibase is used as the database migration tool and is created as a docker
-container that runs on database, conditional on the database reaching a healthy
-state.
+container that runs against the database, conditional on the database reaching
+a healthy state.
 
 ## dbt
 

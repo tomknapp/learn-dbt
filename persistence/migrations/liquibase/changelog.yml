@@ -1,5 +1,11 @@
 databaseChangeLog:
   - include:
+      - file: changelogs/repeatable/functions.yml
+      - relativeToChangelogFile: true
+
+  - include:
+      - file: changelog/changelogs/20250201-1-create-schema-staging.sql
+  - include:
       - file: changelog/changelogs/20250203-1-create-customer.sql
   - include:
       - file: changelog/changelogs/20250203-2-create-telephone.sql
@@ -11,3 +17,5 @@ databaseChangeLog:
       - file: changelog/changelogs/20250203-5-faked-data.sql
   - include:
       - file: changelog/changelogs/20250205-1-create-audit.sql
+  - include:
+      - file: changelog/changelogs/20250210-1-create-ons-postcode.sql

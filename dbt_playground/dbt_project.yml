@@ -43,3 +43,13 @@ models:
     playground:
       +materialized: view
       +schema: staging
+
+seeds:
+  dbt_playground:
+    #+schema: public
+    # This configures seeds/country_codes.csv
+    country_codes:
+    # Override column types
+    +column_types:
+      country_code: varchar(2)
+      country_name: varchar(32)

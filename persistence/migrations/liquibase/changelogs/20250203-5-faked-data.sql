@@ -2,7 +2,7 @@
 --changeset tomknapp:20250203-5-faked-data.sql
 -- Insert customers
 INSERT INTO
-    public.customer (
+    staging.customer (
         user_name,
         first_name,
         last_name,
@@ -66,7 +66,7 @@ VALUES
 
 -- Insert telephone numbers (UK format)
 INSERT INTO
-    public.telephone (
+    staging.telephone (
         customer_id,
         telephone_number,
         std_telephone_number,
@@ -82,7 +82,7 @@ VALUES
 -- Edinburgh area
 -- Insert email addresses
 INSERT INTO
-    public.email (
+    staging.email (
         customer_id,
         email_address,
         std_email_address,
@@ -117,7 +117,7 @@ VALUES
 
 -- Insert addresses (UK format)
 INSERT INTO
-    public.address (
+    staging.address (
         customer_id,
         address_line_1,
         address_line_2,
@@ -197,4 +197,4 @@ VALUES
         'BS8 1BN'
     );
 
---rollback TRUNCATE TABLE public.customer;
+--rollback TRUNCATE TABLE staging.customer;

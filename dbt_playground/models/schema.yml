@@ -2,15 +2,25 @@ version: 2
 
 # Define the raw data sources that can be used within dbt
 sources:
-  - name: postgres_example_db
-    description: "A sample database created by liquibase migrations"
+  - name: postgres_example_staging
+    description: "Staging schema of the sample database"
     database: postgres
-    schema: public
+    schema: staging
     tables:
       - name: customer
         description: "Customers within the system"
       - name: address
         description: "Addresses relating to customers"
+      - name: email
+        description: "Email addresses relating to customers"
+      - name: telephone
+        description: "Telephone numbers relating to customers"
+
+  - name: postgres_example_public
+    description: "Public schema of the sample database"
+    database: postgres
+    schema: public
+    tables:
       - name: audit
         description: "Audit log of database activity"
 
