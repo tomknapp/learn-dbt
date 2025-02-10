@@ -98,6 +98,36 @@ Test the setup and database connection by running:
 dbt debug
 ```
 
+Install the dbt dependencies:
+
+```zsh
+dbt deps
+```
+
+Load the seed data:
+
+```zsh
+dbt seed
+```
+
+Run the dbt models:
+
+```zsh
+dbt run
+```
+
+Build the documentation:
+
+```zsh
+dbt docs generate
+```
+
+View the documentation (when Airflow isn't running due to port conflict):
+
+```zsh
+dbt docs serve
+```
+
 ## Using the playground
 
 Some example usage
