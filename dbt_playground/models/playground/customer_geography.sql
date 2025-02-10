@@ -1,10 +1,17 @@
 with source_address as (
-    Select * from {{ source("postgres_example_db", "address") }}
+    Select * from {{ source("postgres_example_staging", "address") }}
 ),
 
--- From the seeds country csv loaded using 'dbt seeds'
+standardised_address as (
+    Select *,
+    public.fn_valid_postcode(postcode) as valid_postcode,
+    SUBSTRING(public.fn_valid_postcode(postcode) FROM '^[^0-9]*') as std_post_area
+    from source_address
+),
+
+-- From the seeds country csv loaded using 'dbt seed'
 country as (
-    Select * from {{ ref("country") }}
+    Select * from {{ ref("country_codes") }}
 ),
 
 final as (
@@ -13,12 +20,15 @@ final as (
         id,
         customer_id,
         postcode,
-        date_modified,
-        country.country = '{{ var("best_country") }}' as best_country
+        standardised_address.valid_postcode,
+        standardised_address.std_post_area,
+        country.country,
+        country.country = '{{ var("best_country") }}' as best_country,
+        date_modified
     from
-        source_address
+        standardised_address
     left outer join country
-        on source_address.postcode = country.post_area  -- to update
+        on standardised_address.std_post_area = country.post_area
     where
         (customer_id, date_modified) in (
             select

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-fn-valid-postcode
+      author: tomknapp
+      runOnChange: true
+      changes:
+        - sqlFile:
+            path: sql/functions/fn-valid-postcode.sql
+            relativeToChangelogFile: true
+            endDelimiter: \$\$
+            splitStatements: false
+            stripComments: false

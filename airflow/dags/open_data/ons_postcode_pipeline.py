@@ -58,28 +58,15 @@ def ons_postcode_pipeline():
         return {"temp_dir": temp_dir}
 
     @task
-    def create_postgres_table():
-        """Create the Postgres table if it doesn't exist"""
+    def truncate_postgres_table():
+        """Truncate the Postgres table"""
         pg_hook = PostgresHook(postgres_conn_id=connection_id)
 
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS postcodes (
-            postcode VARCHAR(8),
-            positional_quality_indicator INTEGER,
-            eastings INTEGER,
-            northings INTEGER,
-            country_code VARCHAR(9),
-            nhs_regional_ha_code VARCHAR(9),
-            nhs_ha_code VARCHAR(9),
-            admin_county_code VARCHAR(9),
-            admin_district_code VARCHAR(9),
-            admin_ward_code VARCHAR(9)
-        );
-
-        TRUNCATE TABLE postcodes;
+        truncate_table_sql = """
+        TRUNCATE TABLE staging.ons_postcode;
         """
-        pg_hook.run(create_table_sql)
-        logger.info("Postgres table created successfully")
+        pg_hook.run(truncate_table_sql)
+        logger.info("Postgres table truncated successfully")
 
     @task
     def load_to_postgres(download_info: Dict[str, str]):
@@ -94,9 +81,20 @@ def ons_postcode_pipeline():
         logger.info(f"Starting to load files from: {data_dir}")
 
         copy_sql = """
-                COPY postcodes FROM STDIN WITH (
+                COPY staging.ons_postcode (
+                    postcode,
+                    positional_quality_indicator,
+                    eastings,
+                    northings,
+                    country_code,
+                    nhs_regional_ha_code,
+                    nhs_ha_code,
+                    admin_county_code,
+                    admin_district_code,
+                    admin_ward_code)
+                FROM STDIN WITH (
                     FORMAT CSV,
-                    HEADER true
+                    HEADER false
                 )
             """
 
@@ -118,7 +116,7 @@ def ons_postcode_pipeline():
 
     # Define task dependencies
     download_info = download_postcode_data()
-    _ = create_postgres_table() >> load_to_postgres(download_info)
+    _ = truncate_postgres_table() >> load_to_postgres(download_info)
     # create_postgres_table()
     # load_info = load_to_postgres(download_info)
 
