@@ -142,7 +142,7 @@ Sign in with username: **airflow**, password: **airflow**
 Create a database connection for the example ons_postcode_pipeline.py
 to use:
 
-- Naviate to Admin > [Connections](http://localhost:8080/connection/list/)
+- Navigate to Admin > [Connections](http://localhost:8080/connection/list/)
 - Add a new connection of type postgres
 - Enter the connection_id as "postgres_dag_connection" to match
   the one set in the ons_postcode_pipeline.py file
