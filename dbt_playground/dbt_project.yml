@@ -42,7 +42,9 @@ models:
     # Config indicated by + and applies to all files under models/example/
     playground:
       +materialized: view
-      +schema: staging
+      +schema: examples
+    warehouse:
+      +schema: warehouse
 
 seeds:
   dbt_playground:
