@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "Customer dimension table using SCD Type 2"
+    columns:
+      - name: customer_nkey
+        description: >
+          Natural key for the customer.
+          - Uniquely identifies the customer in the warehouse
+          - Composed of the source_system and unique source identifier
+          - Generated using dbt_utils.generate_surrogate_key
+        tests:
+          - not_null
+      - name: customer_skey
+        description: >
+          Surrogate key for the customer.
+          - Uniquely identifies a customer record in the warehouse for a point in time
+          - Composed of the source_system, unique source identifier abd recency_date
+          - Generated using dbt_utils.generate_surrogate_key
+        tests:
+          - unique
+          - not_null
+      - name: id
+        description: "Customer identifier from source system"
+        tests:
+          - not_null
+      - name: user_name
+        description: "User name for the customer"
+        tests:
+          - not_null
+      - name: first_name
+        description: "First name of the customer"
+        tests:
+          - not_null
+      - name: last_name
+        description: "Last name of the customer"
+        tests:
+          - not_null
+      - name: std_first_name
+        description: "Standardized first name of the customer"
+        tests:
+          - not_null
+      - name: std_last_name
+        description: "Standardized last name of the customer"
+        tests:
+          - not_null
+      - name: hashed_password
+        description: "Hashed password for the customer"
+        tests:
+          - not_null
+      - name: is_disabled
+        description: "Flag indicating if the customer is disabled"
+        tests:
+          - not_null
+      - name: is_administrator
+        description: "Flag indicating if the customer is an administrator"
+        tests:
+          - not_null
+      - name: date_created
+        description: "Date when the source record was created"
+        tests:
+          - not_null
+      - name: date_modified
+        description: "Date when the source record was last modified"
+        tests:
+          - not_null
+      - name: source_system
+        description: "Source system identifier"
+        tests:
+          - not_null
+      - name: recency_date
+        description: "Date when the source record was last modified"
+        tests:
+          - not_null
+      - name: last_updated_by
+        description: "User who last updated the source record"
+        tests:
+          - not_null
+      - name: valid_from
+        description: "Date when the record became effective"
+        tests:
+          - not_null
+      - name: valid_to
+        description: "Date when the record became ineffective"
+        tests:
+          - not_null
+      - name: warehouse_created_date
+        description: "Date when the record was created in the warehouse"
+        tests:
+          - not_null
+      - name: warehouse_modified_date
+        description: "Date when the record was last modified in the warehouse"
+        tests:
+          - not_null
+    # N.B. depending on the database, you may need to specify the schema
+    # also, not all database engines require indexes. Snowflake does not.
+    indexes:
+      - name: dim_customer_pkey
+        columns: [customer_skey]
+        unique: true
