@@ -25,6 +25,35 @@ in Airflow to provide the source data to be **T**ransformed by **dbt**.
 
 ## Setup
 
+### [mise-en-place](https://mise.jdx.dev) dev tool
+
+The repo contains a .mise.toml file for use with [mise-en-place](https://mise.jdx.dev)
+
+mise cli can be installed in multiple ways, summarised [here](https://mise.jdx.dev/getting-started.html)
+
+e.g. with homebrew:
+
+```zsh
+brew install mise
+```
+
+After installation, you can configure your shell to automatically [activate](https://mise.jdx.dev/getting-started.html#activate-mise) mise
+when you cd into a directory containing a .mise.toml file by adding the following to your shell configuration file (e.g. ~/.zshrc or ~/.bashrc):
+
+```zsh
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+```
+
+After installation, you can install the required runtimes, create and activate a python virtual environment,
+and install the required python packages by running:
+
+```zsh
+mise install
+```
+
+The first time you run mise in the directory, you will be promted to trust the .mise.toml file. This will allow mise to automatically
+activate the virtual environment when you cd into the directory.
+
 ### Environment variables
 
 Create a .env file in the project root directory based on the .env_example
