@@ -14,7 +14,7 @@ a healthy state.
 
 ## dbt
 
-dbt provides functionality to transformation data for analysis or consumption.
+dbt provides functionality to transform data for analysis or consumption.
 It is generally used for the **T**ransform part of **ELT** pipelines.
 
 ## Airflow
